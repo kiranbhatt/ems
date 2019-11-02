@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Employee.UI.Abstract
 {
+    /// <summary>
+    /// hello test1
+    /// </summary>
     interface ICityService
     {
         List<CityViewModel> CityList(int stateId);
