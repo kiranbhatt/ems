@@ -1,6 +1,7 @@
 ﻿using Employee.UI.Abstract;
 using Employee.UI.Implementation;
 using Employee.UI.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,18 +11,44 @@ using System.Web.Mvc;
 
 namespace Employee.UI.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        public ActionResult Index()
+        public HomeController() : base()
         {
-            ViewBag.Message = "Your Index page.";
 
-            IUserListViewModel userListView = new UserListService();
-            List<UserListViewModel> lists = userListView.UserList();
-
-            return View(lists);
         }
 
+        //[Authorize(Roles = "admin")]
+        public ActionResult Index(string ReturnUrl)
+        {
+            if (ReturnUrl != null)
+            {
+                Response.Redirect(ReturnUrl);
+            }
+            else
+            {
+                List<UserListViewModel> lists = userListService.UserList();
+                return View(lists);
+            }
+
+            return View();
+        }
+
+
+        [HttpGet]
+        public PartialViewResult _UserList()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        public ActionResult JsonGetStatesInfo(List<int> delArray)
+        {
+            IUserService userService = new UserService();
+            bool result = userService.DeleteUsers(delArray);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -42,7 +69,7 @@ namespace Employee.UI.Controllers
 
 
         [HttpGet]
-        public ActionResult CitiesByStateId(int stateId)
+        public ActionResult CitiesByStateId(int stateId = 0)
         {
             ICityService cityService = new CityService();
             List<CityViewModel> city = cityService.CityList(stateId);
@@ -50,36 +77,36 @@ namespace Employee.UI.Controllers
         }
 
 
-        [HttpPost]
-        public ActionResult AadharUpload(HttpPostedFileBase file)
-        {
-            if (file != null && file.ContentLength > 0)
-                try
-                {
-                    string path = Path.Combine(Server.MapPath("~/Images"),
-                                               Path.GetFileName(file.FileName));
-                    file.SaveAs(path);
-                    ViewBag.Message = "File uploaded successfully";
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.Message = "ERROR:" + ex.Message.ToString();
-                }
-            else
-            {
-                ViewBag.Message = "You have not specified a file.";
-            }
-            return View();
-        }
+        //[HttpPost]
+        //public ActionResult AadharUpload(HttpPostedFileBase file)
+        //{
+        //    if (file != null && file.ContentLength > 0)
+        //        try
+        //        {
+        //            string path = Path.Combine(Server.MapPath("~/Images"),
+        //                                       Path.GetFileName(file.FileName));
+        //            file.SaveAs(path);
+        //            ViewBag.Message = "File uploaded successfully";
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ViewBag.Message = "ERROR:" + ex.Message.ToString();
+        //        }
+        //    else
+        //    {
+        //        ViewBag.Message = "You have not specified a file.";
+        //    }
+        //    return View();
+        //}
 
 
         [HttpPost]
         public ActionResult Contact(RegisterViewModel model)
         {
-    //        var errors = ModelState
-    //.Where(x => x.Value.Errors.Count > 0)
-    //.Select(x => new { x.Key, x.Value.Errors })
-    //.ToArray();
+            //        var errors = ModelState
+            //.Where(x => x.Value.Errors.Count > 0)
+            //.Select(x => new { x.Key, x.Value.Errors })
+            //.ToArray();
 
             if (ModelState.IsValid)
             {

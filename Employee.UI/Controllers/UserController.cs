@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Employee.UI.Controllers
 {
@@ -28,7 +29,33 @@ namespace Employee.UI.Controllers
 
                 if (result == true)
                 {
-                    return RedirectToAction("Index", "Home");
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
+        model.Email, DateTime.Now, DateTime.Now.AddMinutes(30),
+        true, "admin", FormsAuthentication.FormsCookiePath);
+
+                    var encryptedTicket = FormsAuthentication.Encrypt(ticket);
+                    var isSsl = Request.IsSecureConnection; // if we are running in SSL mode then make the cookie secure only
+
+                    var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket)
+                    {
+                        HttpOnly = true, // always set this to true!
+                        Secure = isSsl,
+                    };
+
+                    Response.Cookies.Set(cookie);
+
+                    return Redirect("/Home/Index");
+
+                    //string returnUrl = Request.QueryString["ReturnUrl"];
+                    //if (returnUrl == null)
+                    //{
+                    //    returnUrl = "/Home";
+                    //    return Redirect(returnUrl);
+                    //}
+                    //else
+                    //{
+                    //    return Redirect(returnUrl);
+                    //}
                 }
 
             }

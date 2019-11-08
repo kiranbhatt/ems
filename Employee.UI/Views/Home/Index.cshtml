@@ -3,38 +3,4 @@
     ViewBag.Title = "Index";
 }
 
-
-<div class="container">
-    <h1>User Details : @Model.Count()</h1>
-    <div class="table-responsive">
-        <table class="table table-striped">
-
-            <tr>
-                <th>UserName</th>
-                <th>Email</th>
-                <th>PrimaryPhone</th>
-                <th>AadhaarNumber</th>
-                <th>PanCardNumber</th>
-                <th> IsActive</th>
-                <th>Action</th>
-            </tr>
-            @foreach (var item in Model)
-            {
-        <tr>
-            <td>@item.UserName</td>
-            <td>@item.Email</td>
-            <td>@item.PrimaryPhone</td>
-            <td>@item.AadhaarNumber</td>
-            <td>@item.PanCardNumber</td>
-            <td>@item.IsActive</td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.UserName }) |
-                @Html.ActionLink("Details", "Details", new { id=item.UserName }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.UserName })
-            </td>
-     
-        </tr>
-            }
-        </table>
-    </div>
-</div>
+@Html.Partial("_UserList",Model)

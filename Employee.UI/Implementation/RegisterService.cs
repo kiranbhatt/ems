@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Configuration;
 using System.Data.SqlClient;
 using Employee.UI.Abstract;
 using System.Data;
@@ -16,7 +17,7 @@ namespace Employee.UI.Implementation
         {
             try
             {
-                SqlConnection con = new SqlConnection("Data source=DESKTOP-OU6QMCI\\SQLEXPRESS;initial catalog=EMS;integrated security=True");
+                SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["connect"].ConnectionString);
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_SaveUser", con);
                 cmd.CommandType = CommandType.StoredProcedure;

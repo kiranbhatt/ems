@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Configuration;
 
 namespace Employee.UI.Implementation
 {
@@ -14,7 +15,7 @@ namespace Employee.UI.Implementation
         {
             List<StateViewModel> states = new List<StateViewModel>();
 
-            SqlConnection con = new SqlConnection("Data source=DESKTOP-OU6QMCI\\SQLEXPRESS;initial catalog=EMS;integrated security=True");
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["connect"].ConnectionString);
             try
             {
                 con.Open();

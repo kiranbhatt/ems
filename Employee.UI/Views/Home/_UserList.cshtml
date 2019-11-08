@@ -1,0 +1,103 @@
+﻿@model  List<Employee.UI.ViewModel.UserListViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#checkBoxAll').click(function () {
+
+            if ($(this).is(":checked")) {
+                $(".chkCheckBoxId").prop("checked", true)
+            }
+            else {
+                $(".chkCheckBoxId").prop("checked", false)
+            }
+        });
+
+
+        $('#btnDeleteAll').click(function () {
+
+            var delArray = new Array();
+
+            $("table > tbody > tr").each(function () {
+
+                var element = $(this).find('input[type="checkbox"]');
+
+                if ($(element).is(":checked"))
+
+                    delArray.push($(element).val());
+            });
+
+
+
+
+            $.post('/Home/JsonGetStatesInfo', { delArray: delArray },
+                function (data) {
+                    if (data.result != null && data.result != undefined) {
+                        alert(data.result);
+                    }
+                });
+
+        });
+    });
+
+</script>
+
+@if (Model != null)
+{
+
+    <div class="container">
+        <h1>User Details : @Model.Count()</h1>
+        <div class="table-responsive">
+            <table id="DataTable" class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="checkBoxAll" class="custom-checkbox" /></th>
+                        <th>UserName</th>
+                        <th>Email</th>
+                        <th>PrimaryPhone</th>
+                        <th>AadhaarNumber</th>
+                        <th>PanCardNumber</th>
+                        <th> IsActive</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            @*id="chk_@item.UserId"*@
+                            <td><input type="checkbox" name="ID" value="@item.UserId" class="custom-checkbox chkCheckBoxId" /></td>
+                            <td>@item.UserName</td>
+                            <td>@item.Email</td>
+                            <td>@item.PrimaryPhone</td>
+                            <td>@item.AadhaarNumber</td>
+                            <td>@item.PanCardNumber</td>
+                            <td>@item.IsActive</td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+
+            </table>
+            <input type="button" id="btnDeleteAll" value=" DeleteSelectedRows" />
+        </div>
+    </div>
+}
+else
+{
+    <div>Please login into EMS</div>
+}

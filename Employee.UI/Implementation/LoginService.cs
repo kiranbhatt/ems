@@ -5,23 +5,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
+using System.Web.Security;
+using System.Web.Script.Serialization;
+using System.Security.Principal;
+using System.Configuration;
+using System.Data;
 
 namespace Employee.UI.Implementation
 {
-    public class LoginService : ILoginService
+    public class LoginService : BaseService, ILoginService
     {
         public bool Authenticate(LoginViewModel model)
         {
-            SqlConnection con = new SqlConnection("Data source=DESKTOP-OU6QMCI\\SQLEXPRESS;initial catalog=EMS;integrated security=True");
-            con.Open();
-            SqlCommand cmd = new SqlCommand("select * from User where Email= '" + model.Email + "' and Password='" + model.Password + "'", con);
-            SqlDataReader dr = cmd.ExecuteReader();
+            DataTable dtResult = ExecuteReader("select * from [User] where Email= '" + model.Email + "' and Password='" + model.Password + "'", CommandType.Text);
 
-            while (dr.Read())
+            if (dtResult.Rows.Count > 0)
             {
                 return true;
             }
-            con.Close();
 
             return false;
         }

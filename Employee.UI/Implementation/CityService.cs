@@ -6,6 +6,7 @@ using System.Web;
 using System.Data;
 using System.Data.SqlClient;
 using Employee.UI.Abstract;
+using System.Configuration;
 
 namespace Employee.UI.Implementation
 {
@@ -15,7 +16,7 @@ namespace Employee.UI.Implementation
         {
             List<CityViewModel> city = new List<CityViewModel>();
 
-            SqlConnection con = new SqlConnection("Data source=DESKTOP-OU6QMCI\\SQLEXPRESS;initial catalog=EMS;integrated security=True");
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["connect"].ConnectionString);
             try
             {
                 con.Open();
