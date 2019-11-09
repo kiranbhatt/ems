@@ -1,16 +1,12 @@
-﻿using Employee.UI.Abstract;
-using Employee.UI.Implementation;
-using Employee.UI.ViewModel;
+﻿using Employee.UI.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
 namespace Employee.UI.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         // GET: User
         public ActionResult Login()
@@ -24,7 +20,7 @@ namespace Employee.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                ILoginService loginService = new LoginService();
+                
                 bool result = loginService.Authenticate(model);
 
                 if (result == true)

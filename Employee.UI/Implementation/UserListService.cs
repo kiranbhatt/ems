@@ -11,28 +11,32 @@ using System.Configuration;
 
 namespace Employee.UI.Implementation
 {
-    public class UserListService : IUserListViewModel
+    public class UserListService : BaseService, IUserListViewModel
     {
         public List<UserListViewModel> UserList()
         {
             List<UserListViewModel> userLists = new List<UserListViewModel>();
-            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["connect"].ConnectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("select * from [User] order by 1 desc", con);
-            SqlDataReader dr = cmd.ExecuteReader();
-            while (dr.Read())
+
+            using (DataTable dtResult = ExecuteReader("select * from [User] order by 1 desc", CommandType.Text))
             {
-                UserListViewModel userModel = new UserListViewModel();
-                userModel.UserId = Convert.ToInt32(dr["UserId"]);
-                userModel.UserName = Convert.ToString(dr["UserName"]);
-                userModel.Email = Convert.ToString(dr["Email"]);
-                userModel.PrimaryPhone = Convert.ToString(dr["PrimaryPhone"]);
-                userModel.AadhaarNumber = dr["AadhaarNumber"] == DBNull.Value ? 0 : Convert.ToInt64(dr["AadhaarNumber"]);
-                userModel.PanCardNumber = dr["PanCardNumber"] == DBNull.Value ? "N/A" : Convert.ToString(dr["PanCardNumber"]);
-                userModel.IsActive = dr["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsActive"]);
-                userLists.Add(userModel);
+                if (dtResult.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dtResult.Rows.Count; i++)
+                    {
+                        UserListViewModel userModel = new UserListViewModel
+                        {
+                            UserId = Convert.ToInt32(dtResult.Rows[i]["UserId"]),
+                            UserName = Convert.ToString(dtResult.Rows[i]["UserName"]),
+                            Email = Convert.ToString(dtResult.Rows[i]["Email"]),
+                            PrimaryPhone = Convert.ToString(dtResult.Rows[i]["PrimaryPhone"]),
+                            AadhaarNumber = dtResult.Rows[i]["AadhaarNumber"] == DBNull.Value ? 0 : Convert.ToInt64(dtResult.Rows[i]["AadhaarNumber"]),
+                            PanCardNumber = dtResult.Rows[i]["PanCardNumber"] == DBNull.Value ? "N/A" : Convert.ToString(dtResult.Rows[i]["PanCardNumber"]),
+                            IsActive = dtResult.Rows[i]["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dtResult.Rows[i]["IsActive"])
+                        };
+                        userLists.Add(userModel);
+                    }
+                }
             }
-            con.Close();
             return userLists;
         }
     }

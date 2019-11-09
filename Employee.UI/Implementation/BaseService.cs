@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace Employee.UI.Implementation
 {
     public class BaseService
     {
-        protected string ConnectionString = ConfigurationManager.ConnectionStrings["connect"].ConnectionString;
+        private string ConnectionString = ConfigurationManager.ConnectionStrings["connect"].ConnectionString;
 
         protected bool ExecuteNonQuery(string command, CommandType commandType)
         {

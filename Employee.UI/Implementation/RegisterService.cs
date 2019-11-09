@@ -37,7 +37,7 @@ namespace Employee.UI.Implementation
                 cmd.Parameters.Add(new SqlParameter("@PermanentAddress", model.PermanentAddress));
                 cmd.Parameters.Add(new SqlParameter("@AadhaarNumber", model.AadhaarNumber));
                 cmd.Parameters.Add(new SqlParameter("@PanCardNumber", model.PanCardNumber));
-                cmd.Parameters.Add(new SqlParameter("@UploadAadhaar", model.PostedFile.FileName));
+                cmd.Parameters.Add(new SqlParameter("@UploadAadhaar", model.AadhaarFileName));
                 cmd.ExecuteNonQuery();
 
                 con.Close();

@@ -1,12 +1,6 @@
-﻿using Employee.UI.Abstract;
-using Employee.UI.Implementation;
-using Employee.UI.ViewModel;
-using Newtonsoft.Json;
-using System;
+﻿using Employee.UI.ViewModel;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Employee.UI.Controllers
@@ -44,7 +38,7 @@ namespace Employee.UI.Controllers
         [HttpPost]
         public ActionResult JsonGetStatesInfo(List<int> delArray)
         {
-            IUserService userService = new UserService();
+
             bool result = userService.DeleteUsers(delArray);
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -59,7 +53,7 @@ namespace Employee.UI.Controllers
         [HttpGet]
         public ActionResult Contact()
         {
-            IStateService stateService = new StateService();
+
             List<StateViewModel> states = stateService.StateList();
 
             ViewBag.StateList = states;
@@ -71,7 +65,7 @@ namespace Employee.UI.Controllers
         [HttpGet]
         public ActionResult CitiesByStateId(int stateId = 0)
         {
-            ICityService cityService = new CityService();
+
             List<CityViewModel> city = cityService.CityList(stateId);
             return Json(city, JsonRequestBehavior.AllowGet);
         }
@@ -103,27 +97,25 @@ namespace Employee.UI.Controllers
         [HttpPost]
         public ActionResult Contact(RegisterViewModel model)
         {
-            //        var errors = ModelState
-            //.Where(x => x.Value.Errors.Count > 0)
-            //.Select(x => new { x.Key, x.Value.Errors })
-            //.ToArray();
-
             if (ModelState.IsValid)
             {
-                string path = Server.MapPath("~/Uploads/");
-                if (!Directory.Exists(path))
+                if (model.AadhaarFile != null)
                 {
-                    Directory.CreateDirectory(path);
+                    string userAadhaarPath = string.Concat(AadhaarRootPath+ "\\", model.UserName);
+
+                    if (!Directory.Exists(userAadhaarPath))
+                    {
+                        Directory.CreateDirectory(userAadhaarPath);
+                    }
+
+                    string fileName = "AAD_" + model.AadhaarNumber + Path.GetExtension(model.AadhaarFile.FileName);
+                    model.AadhaarFile.SaveAs(userAadhaarPath + "\\" + fileName);
+
+                    model.AadhaarFileName = fileName;
                 }
 
-                if (model.PostedFile != null)
-                {
-                    string fileName = Path.GetFileName(model.PostedFile.FileName);
-                    model.PostedFile.SaveAs(path + fileName);
-                }
 
-                IRegisterService RegisterService = new RegisterService();
-                bool result = RegisterService.Register(model);
+                bool result = registerService.Register(model);
 
                 if (result == true)
                 {
