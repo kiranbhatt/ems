@@ -11,8 +11,8 @@ namespace Employee.UI.ViewModel
         public string UserName { get; set; }
         public string Email { get; set; }
         public string PrimaryPhone { get; set; }
-        public long AadhaarNumber { get; set; }
-        public string PanCardNumber { get; set; }
+        public string AadhaarUrl { get; set; }
+        public string PanUrl { get; set; }
         public bool IsActive { get; set; }
     }
 }

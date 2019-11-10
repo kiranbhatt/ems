@@ -6,41 +6,32 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Configuration;
+using System.Data;
 
 namespace Employee.UI.Implementation
 {
-    public class StateService : IStateService
+    public class StateService : BaseService, IStateService
     {
         public List<StateViewModel> StateList()
         {
             List<StateViewModel> states = new List<StateViewModel>();
 
-            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["connect"].ConnectionString);
-            try
+            using (DataTable dtResult = ExecuteReader("select * from StateMaster", CommandType.Text))
             {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("select * from StateMaster", con);
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                if (dtResult != null && dtResult.Rows.Count > 0)
                 {
-                    StateViewModel stateObj = new StateViewModel();
+                    for (int i = 0; i < dtResult.Rows.Count; i++)
+                    {
+                        StateViewModel stateObj = new StateViewModel();
 
-                    stateObj.Id = Convert.ToInt32(dr[0]);
-                    stateObj.Name = Convert.ToString(dr[1]);
+                        stateObj.Id = Convert.ToInt32(dtResult.Rows[i]["Id"]);
+                        stateObj.Name = Convert.ToString(dtResult.Rows[i]["Name"]);
 
-                    states.Add(stateObj);
+                        states.Add(stateObj);
+                    }
                 }
-                con.Close();
             }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
             return states;
-
         }
     }
 }

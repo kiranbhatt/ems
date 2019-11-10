@@ -21,7 +21,7 @@ namespace Employee.UI.Controllers
             }
             else
             {
-                List<UserListViewModel> lists = userListService.UserList();
+                List<UserListViewModel> lists = userService.List();
                 return View(lists);
             }
 
@@ -38,8 +38,7 @@ namespace Employee.UI.Controllers
         [HttpPost]
         public ActionResult JsonGetStatesInfo(List<int> delArray)
         {
-
-            bool result = userService.DeleteUsers(delArray);
+            bool result = userService.Delete(delArray);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -51,7 +50,7 @@ namespace Employee.UI.Controllers
         }
 
         [HttpGet]
-        public ActionResult Contact()
+        public ActionResult Register()
         {
 
             List<StateViewModel> states = stateService.StateList();
@@ -70,52 +69,16 @@ namespace Employee.UI.Controllers
             return Json(city, JsonRequestBehavior.AllowGet);
         }
 
-
-        //[HttpPost]
-        //public ActionResult AadharUpload(HttpPostedFileBase file)
-        //{
-        //    if (file != null && file.ContentLength > 0)
-        //        try
-        //        {
-        //            string path = Path.Combine(Server.MapPath("~/Images"),
-        //                                       Path.GetFileName(file.FileName));
-        //            file.SaveAs(path);
-        //            ViewBag.Message = "File uploaded successfully";
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            ViewBag.Message = "ERROR:" + ex.Message.ToString();
-        //        }
-        //    else
-        //    {
-        //        ViewBag.Message = "You have not specified a file.";
-        //    }
-        //    return View();
-        //}
-
-
         [HttpPost]
-        public ActionResult Contact(RegisterViewModel model)
+        public ActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (model.AadhaarFile != null)
-                {
-                    string userAadhaarPath = string.Concat(AadhaarRootPath+ "\\", model.UserName);
+                UploadAadhar(model);
 
-                    if (!Directory.Exists(userAadhaarPath))
-                    {
-                        Directory.CreateDirectory(userAadhaarPath);
-                    }
+                UploadPanCard(model);
 
-                    string fileName = "AAD_" + model.AadhaarNumber + Path.GetExtension(model.AadhaarFile.FileName);
-                    model.AadhaarFile.SaveAs(userAadhaarPath + "\\" + fileName);
-
-                    model.AadhaarFileName = fileName;
-                }
-
-
-                bool result = registerService.Register(model);
+                bool result = userService.Register(model);
 
                 if (result == true)
                 {
@@ -123,6 +86,42 @@ namespace Employee.UI.Controllers
                 }
             }
             return View();
+        }
+
+        private void UploadAadhar(RegisterViewModel model)
+        {
+            if (model.AadhaarFile != null)
+            {
+                string userAadhaarPath = string.Concat(AadhaarRootPath + "\\", model.UserName);
+
+                if (!Directory.Exists(userAadhaarPath))
+                {
+                    Directory.CreateDirectory(userAadhaarPath);
+                }
+
+                string fileName = "AAD_" + model.AadhaarNumber + Path.GetExtension(model.AadhaarFile.FileName);
+                model.AadhaarFile.SaveAs(userAadhaarPath + "\\" + fileName);
+
+                model.AadhaarFileName = fileName;
+            }
+        }
+
+        private void UploadPanCard(RegisterViewModel model)
+        {
+            if (model.UploadPanCard != null)
+            {
+                string userPanPath = string.Concat(PanRootPath + "\\", model.UserName);
+
+                if (!Directory.Exists(userPanPath))
+                {
+                    Directory.CreateDirectory(userPanPath);
+                }
+
+                string fileName = "PAN_" + model.PanCardNumber + Path.GetExtension(model.UploadPanCard.FileName);
+                model.UploadPanCard.SaveAs(userPanPath + "\\" + fileName);
+
+                model.PanCardFileName = fileName;
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Configuration;
 
 namespace Employee.UI.Implementation
 {
-    public class CityService : ICityService
+    public class CityService :BaseService, ICityService
     {
         public List<CityViewModel> CityList(int stateId)
         {
@@ -19,28 +19,29 @@ namespace Employee.UI.Implementation
             SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["connect"].ConnectionString);
             try
             {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("select * from CityMaster where StateID=" + stateId, con);
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (DataTable dtResult = ExecuteReader("select * from CityMaster where StateID=" + stateId, CommandType.Text))
                 {
-                    CityViewModel cityObj = new CityViewModel();
+                    if (dtResult!=null&&  dtResult.Rows.Count>0)
+                    {
+                        for (int i = 0; i < dtResult.Rows.Count; i++)
+                        {
+                            CityViewModel cityObj = new CityViewModel();
 
-                    cityObj.Id = Convert.ToInt32(dr[0]);
-                    cityObj.Name = Convert.ToString(dr[1]);
+                            cityObj.Id = Convert.ToInt32(dtResult.Rows[i]["Id"]);
+                            cityObj.Name = Convert.ToString(dtResult.Rows[i]["Name"]);
 
-                    city.Add(cityObj);
+                            city.Add(cityObj);
+                        }
+                    }
                 }
-                con.Close();
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-
-            return city;
+            
+         return city;
 
         }
     }

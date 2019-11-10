@@ -8,12 +8,10 @@ namespace Employee.UI.Controllers
 {
     public class BaseController : Controller
     {
-        protected IUserListViewModel userListService;
-
         protected IUserService userService;
         protected ILoginService loginService;
         protected IStateService stateService;
-        protected IRegisterService registerService;
+      
         protected ICityService cityService;
 
         protected string AadhaarRootPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload\\Aadhaar");
@@ -21,11 +19,9 @@ namespace Employee.UI.Controllers
 
         public BaseController()
         {
-            userListService= new UserListService();
             userService = new UserService();
             loginService = new LoginService();
             stateService = new StateService();
-            registerService = new RegisterService();
             cityService = new CityService();
 
             if (!Directory.Exists(AadhaarRootPath))

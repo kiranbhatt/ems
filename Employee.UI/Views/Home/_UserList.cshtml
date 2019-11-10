@@ -4,6 +4,7 @@
 }
 
 
+
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -32,14 +33,21 @@
             });
 
 
+            if (delArray.length == 0) {
+
+                $('#myModal').modal('show');
+
+            } else {
+
+                $.post('/Home/JsonGetStatesInfo', { delArray: delArray },
+                    function (data) {
+                        if (data.result != null && data.result != undefined) {
+                            console.log(data.result);
+                        }
+                    });
+            }
 
 
-            $.post('/Home/JsonGetStatesInfo', { delArray: delArray },
-                function (data) {
-                    if (data.result != null && data.result != undefined) {
-                        alert(data.result);
-                    }
-                });
 
         });
     });
@@ -57,13 +65,14 @@
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="checkBoxAll" class="custom-checkbox" /></th>
-                        <th>UserName</th>
+                        <th>Name</th>
                         <th>Email</th>
-                        <th>PrimaryPhone</th>
-                        <th>AadhaarNumber</th>
-                        <th>PanCardNumber</th>
+                        <th>Phone</th>
+                        <th>Aadhaar</th>
+                        <th>Pancard</th>
                         <th> IsActive</th>
-                        <th>Action</th>
+                        <th>Action <input type="button" id="btnDeleteAll" class="btn btn-danger" value=" Delete" /></th>
+
                     </tr>
                 </thead>
 
@@ -77,13 +86,36 @@
                             <td>@item.UserName</td>
                             <td>@item.Email</td>
                             <td>@item.PrimaryPhone</td>
-                            <td>@item.AadhaarNumber</td>
-                            <td>@item.PanCardNumber</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.AadhaarUrl))
+                                {
+                                    <img src="@Url.Content("~/Content/file.png")" alt="Image" />
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.PanUrl))
+                                {
+                                    <img src="@Url.Content("~/Content/file.png")" alt="Image" />
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+
+                            </td>
                             <td>@item.IsActive</td>
                             <td>
-                                @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+                                
+                                <input type="button" id="@item.UserId" class="btn btn-default" value=" Edit" />
+                                
+                                <input type="button" id="@item.UserId" class="btn btn-primary" value=" View" />
+                             
+                                <input type="button" id="@item.UserId" class="btn btn-danger" value=" Delete" />
                             </td>
 
                         </tr>
@@ -93,7 +125,7 @@
 
 
             </table>
-            <input type="button" id="btnDeleteAll" value=" DeleteSelectedRows" />
+
         </div>
     </div>
 }
@@ -101,3 +133,29 @@ else
 {
     <div>Please login into EMS</div>
 }
+
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 style="color:red" class="modal-title">Do you want to delete ?</h4>
+                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                No checkbox checked. Please select the row which you want to delete..
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

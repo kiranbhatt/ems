@@ -58,10 +58,13 @@ namespace Employee.UI.ViewModel
         public string PanCardNumber { get; set; }
         [Required(ErrorMessage = "Please select file.")]
         //[RegularExpression(@"([a-zA-Z0-9\s_\\.\-:])+(.png|.jpg|.gif)$", ErrorMessage = "Only Image files allowed.")]
+        [Display(Name = "Upload aadhaar")]
         public HttpPostedFileBase AadhaarFile { get; set; }
 
         public string AadhaarFileName { get; set; }
-
+        [Display(Name = "Upload PanCard")]
+        public HttpPostedFileBase UploadPanCard { get; set; }
+        public string PanCardFileName { get; set; }
 
 
     }

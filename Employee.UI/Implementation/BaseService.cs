@@ -7,10 +7,12 @@ namespace Employee.UI.Implementation
 {
     public class BaseService
     {
-        private string ConnectionString = ConfigurationManager.ConnectionStrings["connect"].ConnectionString;
+        private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["connect"].ConnectionString;
 
         protected bool ExecuteNonQuery(string command, CommandType commandType)
         {
+            bool status = false;
+
             try
             {
                 using (SqlConnection con = new SqlConnection(ConnectionString))
@@ -21,9 +23,13 @@ namespace Employee.UI.Implementation
                         cmd.CommandType = commandType;
 
                         int result = cmd.ExecuteNonQuery();
+                        if (result > 0)
+                        {
+                            status = true;
+                        }
                     }
                 }
-                return true;
+                return status;
             }
             catch (Exception ex)
             {

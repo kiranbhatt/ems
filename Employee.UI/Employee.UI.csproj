@@ -119,10 +119,8 @@
   <ItemGroup>
     <Compile Include="Abstract\ICityService.cs" />
     <Compile Include="Abstract\ILoginService.cs" />
-    <Compile Include="Abstract\IRegisterService.cs" />
     <Compile Include="Abstract\IStateService.cs" />
     <Compile Include="Abstract\IUserService.cs" />
-    <Compile Include="Abstract\IUserListViewModel.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -135,9 +133,7 @@
     <Compile Include="Implementation\BaseService.cs" />
     <Compile Include="Implementation\CityService.cs" />
     <Compile Include="Implementation\LoginService.cs" />
-    <Compile Include="Implementation\RegisterService.cs" />
     <Compile Include="Implementation\StateService.cs" />
-    <Compile Include="Implementation\UserListService.cs" />
     <Compile Include="Implementation\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\CityViewModel.cs" />
@@ -151,6 +147,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\file.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -170,6 +167,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Upload\Aadhaar\Naveen Semwal\AAD_987655678943.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -182,7 +180,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\Home\_UserList.cshtml" />
@@ -192,6 +190,8 @@
     <Folder Include="Models\" />
     <Folder Include="UploadedFiles\" />
     <Folder Include="Uploads\" />
+    <Folder Include="Upload\Aadhaar\KiranBhatt\" />
+    <Folder Include="Upload\PAN\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>

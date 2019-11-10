@@ -11,7 +11,21 @@ class EmployeeRegister {
 
         if (document.getElementById('IsAddressSame').checked) {
             document.getElementById('PermanentState').value = document.getElementById('CurrentState').value;
-            document.getElementById('PermanentCity').value = document.getElementById('CurrentCity').value;
+
+            var id = document.getElementById('PermanentState').value;
+            $.get("https://localhost:44350/Home/CitiesByStateId", { stateId: id }, function (data) {
+                var v = "<option>---Select---</option>";
+                
+
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Id + ">" + v1.Name + "</option>";
+                });
+                $("#PermanentCity").html(v);
+                $("#PermanentCity").val(document.getElementById('CurrentCity').value);
+               
+                
+            });
+ 
             document.getElementById('PermanentAddress').value = document.getElementById('CurrentAddress').value;
         }
 
@@ -22,9 +36,9 @@ class EmployeeRegister {
         }
     }
     PopulateCities(state) {
-        alert(state);
+
         var id = $('#' + state).val();
-        alert(id);
+
 
         $.get("https://localhost:44350/Home/CitiesByStateId", { stateId: id }, function (data) {
             var v = "<option>---Select---</option>";
@@ -39,9 +53,9 @@ class EmployeeRegister {
 
     }
     PopulatePermanentCities(state) {
-        
+
         var id = $('#' + state).val();
-    
+
 
         $.get("https://localhost:44350/Home/CitiesByStateId", { stateId: id }, function (data) {
             var v = "<option>---Select---</option>";
